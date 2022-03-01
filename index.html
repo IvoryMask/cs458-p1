@@ -1,0 +1,170 @@
+<html style="font-size: 16px;" lang="en">
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <title>Netflix</title>
+    <link rel="icon" href="icon.png" type="image/png">
+  </head>
+  <body>
+
+  <script>
+      window.fbAsyncInit = function() {
+          FB.init({
+              appId      : '698263764920048',
+              cookie     : true,
+              xfbml      : true,
+              version    : 'v13.0'
+          });
+      };
+
+      (function(d, s, id){
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js";
+          fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      function statusChangeCallback(response){
+          if(response.status === 'connected'){
+              console.log('Logged in and authenticated');
+              setElements(true);
+              testAPI();
+          } else {
+              console.log('Not authenticated');
+              setElements(false);
+          }
+      }
+
+      function checkLoginState() {
+          FB.getLoginStatus(function(response) {
+              statusChangeCallback(response);
+          });
+      }
+
+      function testAPI(){
+          FB.api('/me?fields=name,email', function(response){
+              if(response && !response.error){
+                  console.log(response);
+                  successfullLogin(response);
+                  //buildProfile(response);
+              }
+          })
+      }
+
+      function successfullLogin(user) {
+
+        let profile = `Login Successfull for ${user.email}
+        `;
+
+        document.getElementById('myPopup').innerHTML = profile;
+
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+      }
+
+      function unSuccessfullLogin() {
+
+        let profile = `unSuccessfull Login
+        `;
+
+        document.getElementById('myPopup2').innerHTML = profile;
+
+        var popup = document.getElementById("myPopup2");
+        popup.classList.toggle("show");
+      }
+
+
+
+      function setElements(isLoggedIn){
+          if(isLoggedIn){
+              document.getElementById('fb-btn').style.display = 'none';
+          } else {
+              document.getElementById('fb-btn').style.display = 'block';
+          }
+      }
+
+      function logout(){
+          FB.logout(function(response){
+              setElements(false);
+          });
+      }
+
+
+      function authanticate(){
+        var email_or_phone = document.getElementById("email_or_phone").value;
+        var password = document.getElementById("password").value;
+        console.log('email:' + email_or_phone);
+
+
+        alert('email:' + email_or_phone + " password" + password);
+
+/*
+        if(password == "abcd"){
+          if(email_or_phone == "a@gmail.com" || email_or_phone == "05055055555"){
+            var user = {email: email_or_phone};
+            successfullLogin(user);
+          }
+          else{
+            unSuccessfullLogin();
+          }
+        }
+        else if(password == "123AbC"){
+          if(email_or_phone == "b@gmail.com" || email_or_phone == "05065065656"){
+            var user = {email: email_or_phone};
+            successfullLogin(user);
+          }
+          else{
+            unSuccessfullLogin();
+          }
+        }
+        else if(password == "aB_123."){
+          if(email_or_phone == "c@gmail.com" || email_or_phone == "05075075757"){
+            var user = {email: email_or_phone};
+            successfullLogin(user);
+          }
+          else{
+            unSuccessfullLogin();
+          }
+        }
+        else{
+          unSuccessfullLogin();
+        }
+        */
+      }
+
+  </script>
+
+
+
+  <div class="header">
+      <img src="logo.png" alt="Netflix" class="nfHeader">
+    </div>
+    <div class="login">
+        <h1 class="login__title">Sign In</h1>
+        <form>
+        <div class="login__group">
+          <input class="login__group__input" type="text" placeholder=" " id="email_or_phone" required="true"/>
+          <label class="login__group__label">Email or phone number</label>
+        </div>
+        <div class="login__group">
+          <input class="login__group__input" type="password" id="password" required="true"/>
+          <label class="login__group__label">Password</label>
+        </div>
+          <button type="submit" class="login__sign-in" type="button" onclick='authanticate()'>Sign In</button>
+      </form>
+        <div class="login__secondary-cta"><a class="login__secondary-cta__text" href="#">Remember me</a><a class="login__secondary-cta__text login__secondary-cta__text--need-help" href="#">Need help?</a></div>
+        <fb:login-button
+                class="logib_btn"
+                id="fb-btn"
+                scope="public_profile,email"
+                onlogin="checkLoginState();">
+        </fb:login-button>
+      </div>
+
+      <div class="popup">
+        <span class="popuptext" id="myPopup"></span>
+        <span class="popuptext2" id="myPopup2"></span>
+      </div>
+
+  </body>
+</html>
